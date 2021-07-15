@@ -8,7 +8,8 @@ $(function () {
             {label: '登录名', name: 'loginName', index: 'loginName', width: 120},
             {label: '身份状态', name: 'lockedFlag', index: 'lockedFlag', width: 60, formatter: lockedFormatter},
             {label: '是否注销', name: 'isDeleted', index: 'isDeleted', width: 60, formatter: deletedFormatter},
-            {label: '注册时间', name: 'createTime', index: 'createTime', width: 120}
+            {label: '注册时间', name: 'createTime', index: 'createTime', width: 120},
+            {label: '操作', name: 'userId',width: 120,formatter:resetPassword}
         ],
         height: 560,
         rowNum: 10,
@@ -55,6 +56,9 @@ $(function () {
         } else if (cellvalue == 0) {
             return "<button type=\"button\" class=\"btn btn-block btn-success btn-sm\" style=\"width: 50%;\">正常</button>";
         }
+    }
+    function resetPassword(cellvalue) {
+        return "<button type=\"button\" class=\"btn btn-block btn-danger btn-sm\" style=\"width: 50%;\" onclick='resetpwt("+cellvalue+")'>重置密码</button>";
     }
 });
 
@@ -108,5 +112,38 @@ function lockUser(lockStatus) {
             }
         }
     )
+    ;
+}
+function resetpwt(id) {
+
+    swal({
+        title: "确认弹框",
+        text: "确认要重置该密码吗?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((flag) => {
+        if (flag) {
+            $.ajax({
+                type: "POST",
+                url: "/admin/users/resetpwt" ,
+                contentType: "application/json",
+                data: JSON.stringify(id),
+                success: function (r) {
+                    if (r.resultCode == 200) {
+                        swal("操作成功,默认密码为123456", {
+                            icon: "success",
+                        });
+                        $("#jqGrid").trigger("reloadGrid");
+                    } else {
+                        swal(r.message, {
+                            icon: "error",
+                        });
+                    }
+                }
+            });
+        }
+    }
+)
     ;
 }

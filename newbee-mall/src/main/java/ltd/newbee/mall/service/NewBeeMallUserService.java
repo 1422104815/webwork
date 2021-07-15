@@ -50,6 +50,13 @@ public interface NewBeeMallUserService {
      * @return
      */
     NewBeeMallUserVO updateUserInfo(MallUser mallUser, HttpSession httpSession);
+    /**
+     * 重置密码
+     *
+     * @param id 用户id
+     * @return
+     */
+    boolean resetpwt(int id);
 
     /**
      * 用户禁用与解除禁用(0-未锁定 1-已锁定)

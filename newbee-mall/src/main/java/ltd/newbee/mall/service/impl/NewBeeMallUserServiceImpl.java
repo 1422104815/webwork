@@ -74,6 +74,17 @@ public class NewBeeMallUserServiceImpl implements NewBeeMallUserService {
     }
 
     @Override
+    public boolean resetpwt(int id) {
+        MallUser userFromDB = mallUserMapper.selectByPrimaryKey((long)id);
+        userFromDB.setPasswordMd5(MD5Util.MD5Encode("123456", "UTF-8"));
+        if (userFromDB != null) {
+            if(mallUserMapper.updateByPrimaryKeySelective(userFromDB)>0) {
+                return true;
+            }
+        }
+        return false;
+    }
+    @Override
     public NewBeeMallUserVO updateUserInfo(MallUser mallUser, HttpSession httpSession) {
         NewBeeMallUserVO userTemp = (NewBeeMallUserVO) httpSession.getAttribute(Constants.MALL_USER_SESSION_KEY);
         MallUser userFromDB = mallUserMapper.selectByPrimaryKey(userTemp.getUserId());

@@ -8,7 +8,9 @@
  */
 package ltd.newbee.mall.controller.admin;
 
+import ltd.newbee.mall.entity.MallUser;
 import ltd.newbee.mall.service.NewBeeMallUserService;
+import ltd.newbee.mall.util.MD5Util;
 import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.Result;
 import ltd.newbee.mall.util.ResultGenerator;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -68,6 +71,24 @@ public class NewBeeMallUserController {
             return ResultGenerator.genSuccessResult();
         } else {
             return ResultGenerator.genFailResult("禁用失败");
+        }
+    }
+
+
+
+    /**
+     * 重置密码，默认密码为123456
+     */
+    @RequestMapping(value = "/users/resetpwt", method = RequestMethod.POST)
+    @ResponseBody
+    public Result resetpwt(@RequestBody int id, HttpSession httpSession) {
+//        if (ids.length < 1) {
+//            return ResultGenerator.genFailResult("参数异常！");
+//        }
+        if (newBeeMallUserService.resetpwt(id)) {
+            return ResultGenerator.genSuccessResult();
+        } else {
+            return ResultGenerator.genFailResult("重置失败");
         }
     }
 }
